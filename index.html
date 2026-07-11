@@ -75,10 +75,10 @@
 
   <main id="main">
     <section class="signal-strip" aria-label="Paper highlights">
-      <div><strong>∞</strong><span>Multi-view</span><em>input images</em></div>
-      <div><strong>3D</strong><span>Native prior</span><em>object-level in-situ completion</em></div>
+      <div><strong>∞</strong><span>Multi-view</span><em>Input images</em></div>
+      <div><strong>3D</strong><span>Native prior</span><em>Object-level in-situ completion</em></div>
       <div><strong>Δ</strong><span>One for all</span><em>Topology, Geometry and Appearance</em></div>
-      <div><strong>&</strong><span>Objects & Background</span><em>complete scene output</em></div>
+      <div><strong>&</strong><span>Objects & Background</span><em>Complete scene output</em></div>
     </section>
 
     <section class="intro section-pad" id="intro">
@@ -130,7 +130,7 @@
 
     <section class="method section-pad" id="method">
       <div class="section-shell">
-        <header class="section-head reveal"><p class="eyebrow">Method / Guided in-situ reconstruction</p><h2>Method Overview</h2><p>DecomVoxel bridges 3D-native generation and scene reconstruction directly in structured voxel space.</p></header>
+        <header class="section-head method-head reveal"><p class="eyebrow">Method / Guided in-situ reconstruction</p><h2>Method Overview</h2><p>Our framework bridges 3D generative priors with neural reconstruction through a guided in-situ denoising optimization. We segment objects from the initial scene and then sequentially optimize their geometry and appearance under adaptive spatial guidance. This process recovers missing structures and consistent textures while preserving the original scene layout, producing high-fidelity topology, geometry, and appearance.</p></header>
         <figure class="method-overview reveal"><img src="figures/method.png" alt="DecomVoxel method overview from initial reconstruction through geometry and appearance optimization to outputs"><figcaption><span>Pipeline overview</span> Background completion and object-level geometry and appearance refinement.</figcaption></figure>
         <div class="method-sections">
           <article class="method-section reveal"><span class="method-index">01 / Denoise</span><div><h3>In-situ Denoising Optimization</h3><p>Incomplete object segments are optimized inside the original scene coordinate space. Our epsilon-based distillation objective naturally downweights unreliable high-noise gradients, then strengthens precise guidance as the latent approaches the clean manifold.</p><div class="tag-row"><span>Epsilon loss</span><span>Flow matching</span><span>Stable refinement</span></div></div></article>
@@ -142,10 +142,17 @@
 
     <section class="results section-pad" id="results">
       <div class="section-shell">
-        <header class="section-head reveal"><p class="eyebrow">Results / Geometry to texture</p><h2>Complete scenes, one object at a time.</h2><p>Browse four reconstructed scenes and compare semantic geometry with final appearance.</p></header>
+        <header class="section-head reveal"><p class="eyebrow">Results / Geometry to texture</p><h2>Qualitative Comparison</h2><p>Browse four reconstructed scenes and compare semantic geometry with final appearance.</p></header>
         <div class="result-carousel reveal">
           <div class="result-toolbar"><div><span id="result-counter">01 / 04</span><strong id="result-name">Replica · Scan 2</strong></div><div><button class="result-prev" type="button" aria-label="Previous result"><i data-lucide="arrow-left"></i></button><button class="result-next" type="button" aria-label="Next result"><i data-lucide="arrow-right"></i></button></div></div>
-          <div class="result-pair"><figure><span>Geometry</span><img id="result-geometry" src="results/scan2-ours-replica-geometry_texture.png" alt="Replica scan 2 geometry result"></figure><figure><span>Appearance</span><img id="result-appearance" src="results/scan2-ours-replica-appearance_texture.png" alt="Replica scan 2 appearance result"></figure></div>
+          <div class="result-pair"><figure><span>Ours · Geometry</span><img id="result-geometry" src="results/scan2-ours-replica-geometry_texture.png" alt="Replica scan 2 geometry result"></figure><figure><span>Ours · Appearance</span><img id="result-appearance" src="results/scan2-ours-replica-appearance_texture.png" alt="Replica scan 2 appearance result"></figure></div>
+          <div class="baseline-comparison" aria-label="Baseline comparison">
+            <figure><span>GT</span><img id="result-gt" src="results/scan2-gt-replica-appearance_texture.png" alt="Replica scan 2 ground truth"></figure>
+            <figure><span>SAM3D</span><img id="result-sam3d" src="results/scan2-sam3d-replica-appearance_texture.png" alt="Replica scan 2 SAM3D result"></figure>
+            <figure><span>MV-SAM3D</span><img id="result-mvsam3d" src="results/scan2-mvsam3d-replica-appearance_texture.png" alt="Replica scan 2 MV-SAM3D result"></figure>
+            <figure><span>ShapeR</span><img id="result-shaper" src="results/scan2-shaper-replica-geometry_texture.png" alt="Replica scan 2 ShapeR result"></figure>
+            <figure><span>SimRecon</span><img id="result-simrecon" src="results/scan2-simrecon-replica-appearance_texture.png" alt="Replica scan 2 SimRecon result"></figure>
+          </div>
         </div>
       </div>
     </section>

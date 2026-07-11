@@ -35,13 +35,25 @@
   }, { threshold: 0.12, rootMargin: "0px 0px -8%" });
   document.querySelectorAll(".reveal").forEach((element) => revealObserver.observe(element));
 
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      sectionLinks.forEach((link) => link.classList.toggle("active", link.hash === `#${entry.target.id}`));
+  const navSections = sectionLinks
+    .map((link) => document.querySelector(link.hash))
+    .filter(Boolean);
+  const updateActiveSection = () => {
+    const progressLine = window.scrollY + window.innerHeight * 0.32;
+    let activeId = "";
+    navSections.forEach((section) => {
+      if (section.offsetTop <= progressLine) activeId = section.id;
     });
-  }, { threshold: 0.2, rootMargin: "-20% 0px -65%" });
-  document.querySelectorAll("main section[id]").forEach((section) => sectionObserver.observe(section));
+    sectionLinks.forEach((link) => {
+      const isActive = link.hash === `#${activeId}`;
+      link.classList.toggle("active", isActive);
+      if (isActive) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  };
+  updateActiveSection();
+  window.addEventListener("scroll", updateActiveSection, { passive: true });
+  window.addEventListener("resize", updateActiveSection);
 
   const sceneData = {
     blender: {
@@ -137,6 +149,13 @@
   ];
   const resultGeometry = document.querySelector("#result-geometry");
   const resultAppearance = document.querySelector("#result-appearance");
+  const resultComparisons = [
+    { image: document.querySelector("#result-gt"), method: "gt", mode: "appearance", label: "ground truth" },
+    { image: document.querySelector("#result-sam3d"), method: "sam3d", mode: "appearance", label: "SAM3D result" },
+    { image: document.querySelector("#result-mvsam3d"), method: "mvsam3d", mode: "appearance", label: "MV-SAM3D result" },
+    { image: document.querySelector("#result-shaper"), method: "shaper", mode: "geometry", label: "ShapeR result" },
+    { image: document.querySelector("#result-simrecon"), method: "simrecon", mode: "appearance", label: "SimRecon result" },
+  ];
   const resultName = document.querySelector("#result-name");
   const resultCounter = document.querySelector("#result-counter");
   let resultIndex = 0;
@@ -146,11 +165,17 @@
     const result = resultData[resultIndex];
     resultGeometry.classList.add("switching");
     resultAppearance.classList.add("switching");
+    resultComparisons.forEach(({ image }) => image.classList.add("switching"));
     window.setTimeout(() => {
       resultGeometry.src = `results/${result.id}-ours-${result.dataset}-geometry_texture.png`;
       resultAppearance.src = `results/${result.id}-ours-${result.dataset}-appearance_texture.png`;
       resultGeometry.alt = `${result.name} geometry result`;
       resultAppearance.alt = `${result.name} appearance result`;
+      resultComparisons.forEach(({ image, method, mode, label }) => {
+        image.src = `results/${result.id}-${method}-${result.dataset}-${mode}_texture.png`;
+        image.alt = `${result.name} ${label}`;
+        image.classList.remove("switching");
+      });
       resultName.textContent = result.name;
       resultCounter.textContent = `${String(resultIndex + 1).padStart(2, "0")} / ${String(resultData.length).padStart(2, "0")}`;
       resultGeometry.classList.remove("switching");
