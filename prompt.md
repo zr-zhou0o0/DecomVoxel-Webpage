@@ -155,8 +155,31 @@ recovers missing structures and consistent textures while preserving the origina
 1. 正标题 DecomVoxel 这个栏目宽一点，把DECOMVOXEL放到一行；或者让“decom”字变窄一点，你之前的改动根本没有改这个地方。但是第一页其它的副标题、作者信息等不需要动。
 2. Qualitative Comparison 也像 method overview 栏目一样变成整页的宽度
 3. Qualitative Comparison 的滑动窗口整体缩小一点；然后下面的 “GT、SAM3D、MVSAM3D、ShapeR、SimRecon” 整体也缩小很多，而且要确保它们五个的整体宽度=上面两个ours的整体宽度，也就是两排图片的宽度对齐。
+4. analysis 柱状图里面的yellow改成acid颜色。
 
 
-2. 作者链接
-2. 文字修正+tag修正
-3. 致谢
+1. 现在 decom 的宽度合适了，但是voxel和decom变成一排了。voxel还是放在下一排比较好。
+2. Analysis / Quantitative comparison 里面的颜色改成依次用：peach,purple,acid,dark_purple,peach-dark,green
+
+1. 写一个acknowledgement，致谢 Trellis GeoSVR 还有我们参考的网页模板 https://vision-language-kinematics.github.io/ 和 https://robosnap.github.io/，写在最下面，字体小一些
+
+
+1. https://fictionarry.github.io/GeoSVR-project/ 给geosvr也加引用。
+2. Method Overview 里面的3个部分稍微详细一些，可以每个部分内部分分条列举、分析一下，甚至可以引用重点公式。
+3. “Each constraint earns its place.” 改成 “Comparison of different optimization strategies. ”，然后后面那段描述文字也改成  Our proposed epsilon-based denoising loss (a), linear noise schedule (b), re-distributed pruning strategy (c), and cosine-power preservation loss weight schedule (d) consistently achieve the most stable convergence.
+4. Ablation / Design choices 这里的图片改成用 figures/var-1.png figures/var-2.png figures/var-3.png figures/var-4.png，它们分别对应的小标题是 (a) Denoising Loss Term (b) Noise Sampling 𝑡 Schedule (c) Prune Strategy (d) Preservation Loss Weight 𝑤𝑂 schedule
+
+
+
+In-situ Denoising Optimization 里面，左侧第一个栏目可以改成 Preliminaries，2、3栏目不变。
+
+In-situ Denoising Optimization 最下面方框里面的公式渲染有问题 间距过大，而且也不是公式的形态；∇x′Lε = (1 − t)∇x′Lv 稍微好一些。
+
+Adaptive Spatial Guidance 里面的公式的那个小方框可以直接去掉。Optimization 里的公式也可以直接去掉。
+
+
+Comparison of different optimization strategies 里面的 (c) 变成 copyright 符号了，要改一下；并且这四张 var 图片，宽度分别是 1:2:1:2，现在的四宫格的宽度是 1:1:1:1，所以不协调，把四宫格宽度调整一下。
+
+
+1. 文字修正+tag修正
+2. video？
