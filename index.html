@@ -19,11 +19,11 @@
   <a class="skip-link" href="#main">Skip to content</a>
   <nav class="nav" aria-label="Primary navigation">
     <a class="nav-brand" href="#top" aria-label="DecomVoxel home">
-      <span class="brand-cube" aria-hidden="true"></span>
+      <img class="brand-logo" src="figures/logo.png" alt="">
       <span>DECOMVOXEL</span>
     </a>
     <div class="nav-links" id="nav-links">
-      <a href="#abstract">Abstract</a>
+      <a href="#intro">Intro</a>
       <a href="#method">Method</a>
       <a href="#results">Results</a>
       <a href="#analysis">Analysis</a>
@@ -41,121 +41,130 @@
     </div>
     <div class="voxel-field" aria-hidden="true"></div>
     <div class="hero-content">
-      <p class="hero-kicker"><span>3D scene reconstruction</span><span class="status-dot"></span><span>2026</span></p>
+      <p class="hero-kicker"><span>SIGGRAPH ASIA</span><span class="status-dot"></span><span>2026</span></p>
       <h1><span>Decom</span><strong>Voxel</strong></h1>
       <p class="hero-title">Harnessing 3D-Native Priors with Guided In-situ Denoising Optimization for Decompositional Scene Reconstruction</p>
-      <p class="authors">Anonymous Authors</p>
+      <div class="authors" aria-label="Authors and affiliations">
+        <p class="author-list">
+          <a href="mailto:njf23@mails.tsinghua.edu.cn">Junfeng Ni<sup>1,2,*</sup></a>
+          <a href="mailto:2033616887@qq.com">Zirui Zhou<sup>1,*</sup></a>
+          <a href="mailto:ethanchen@g.ucla.edu">Yixin Chen<sup>2,†</sup></a>
+          <a href="mailto:liuyu_ai@foxmail.com">Yu Liu<sup>1,2</sup></a>
+          <a href="mailto:nan.jiang@stu.pku.edu.cn">Nan Jiang<sup>2,3</sup></a>
+          <a href="mailto:zhifei.yeung@gmail.com">Zhifei Yang<sup>3</sup></a>
+          <a href="mailto:s.c.zhu@pku.edu.cn">Songchun Zhu<sup>3</sup></a>
+          <a href="mailto:huangsiyuan@ucla.edu">Siyuan Huang<sup>2</sup></a>
+        </p>
+        <p class="affiliations"><span><sup>1</sup> Tsinghua University</span><span><sup>2</sup> Beijing Institute for General Artificial Intelligence</span><span><sup>3</sup> Peking University</span></p>
+        <p class="author-notes"><span>* Equal contribution.</span><span>† Project lead.</span></p>
+      </div>
       <div class="hero-actions">
         <a class="action action-disabled" href="#" aria-disabled="true" title="Paper link coming soon">
           <i data-lucide="file-text" aria-hidden="true"></i><span>Paper</span><small>soon</small>
         </a>
-        <a class="action action-disabled" href="#" aria-disabled="true" title="Code link coming soon">
-          <i data-lucide="github" aria-hidden="true"></i><span>Code</span><small>soon</small>
+        <a class="action" href="https://github.com/zr-zhou0o0/DecomVoxel" target="_blank" rel="noopener">
+          <i data-lucide="github" aria-hidden="true"></i><span>Code</span>
         </a>
         <a class="action" href="https://huggingface.co/datasets/zr-zhou/Replica" target="_blank" rel="noopener">
           <i data-lucide="database" aria-hidden="true"></i><span>Data</span>
         </a>
       </div>
     </div>
-    <a class="scroll-cue" href="#abstract"><span>Explore the scene</span><i data-lucide="arrow-down" aria-hidden="true"></i></a>
+    <a class="scroll-cue" href="#intro"><span>Explore the scene</span><i data-lucide="arrow-down" aria-hidden="true"></i></a>
   </header>
 
   <main id="main">
     <section class="signal-strip" aria-label="Paper highlights">
-      <div><strong>01</strong><span>Scene in</span><em>posed images</em></div>
-      <div><strong>3D</strong><span>Native prior</span><em>object-level geometry</em></div>
-      <div><strong>∞</strong><span>Views optimized</span><em>in situ</em></div>
-      <div><strong>01</strong><span>Scene out</span><em>textured meshes</em></div>
+      <div><strong>∞</strong><span>Multi-view</span><em>input images</em></div>
+      <div><strong>3D</strong><span>Native prior</span><em>object-level in-situ completion</em></div>
+      <div><strong>Δ</strong><span>One for all</span><em>Topology, Geometry and Appearance</em></div>
+      <div><strong>&</strong><span>Objects & Background</span><em>complete scene output</em></div>
     </section>
 
-    <section class="abstract section-pad" id="abstract">
-      <div class="section-shell abstract-grid reveal">
-        <div>
-          <p class="eyebrow">Abstract / Why it matters</p>
-          <h2>A scene should be more than a surface.</h2>
+    <section class="intro section-pad" id="intro">
+      <div class="section-shell intro-grid reveal">
+        <div class="intro-copy">
+          <p class="eyebrow">Intro / Guided 3D-native priors</p>
+          <h2>Complete the unseen. Preserve the scene.</h2>
+          <p class="lead">We propose <strong>DecomVoxel</strong>, a framework that integrates guided 3D-native priors to enhance decompositional scene reconstruction. By formulating object completion as guided in-situ optimization, our method achieves high-quality <strong>topology</strong>, <strong>geometry</strong>, and <strong>appearance</strong> for both <strong>individual objects</strong> and <strong>backgrounds</strong> while strictly preserving original spatial layouts.</p>
+          <div class="tag-row" aria-label="Key capabilities"><span>3D-native prior</span><span>In-situ optimization</span><span>Spatially aligned</span></div>
         </div>
-        <div class="abstract-copy">
-          <p class="lead">DecomVoxel reconstructs indoor scenes as coherent, object-level assets rather than a single entangled shell.</p>
-          <p>Starting from posed images, our pipeline decomposes a scene into objects, initializes each component with a strong 3D-native prior, and refines geometry and appearance directly inside the scene. Guided denoising preserves the observed layout while recovering detailed, complete assets.</p>
-          <p>The result is a high-quality textured mesh with clean topology, geometry, appearance, and background, ready for editing, simulation, and downstream spatial reasoning.</p>
-          <div class="abstract-tags" aria-label="Key properties">
-            <span>Decomposable</span><span>Layout-preserving</span><span>Textured mesh</span>
+        <figure class="video-figure">
+          <div class="video-frame">
+            <iframe src="https://www.youtube-nocookie.com/embed/xcu_eHmrXes?rel=0" title="DecomVoxel project video" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
           </div>
+          <figcaption><span>Project video</span> Guided in-situ optimization.</figcaption>
+        </figure>
+      </div>
+      <div class="section-shell intro-showcase">
+        <header class="section-head reveal">
+          <p class="eyebrow">Scene explorer / Three rendering modes</p>
+          <h3>One view. Three readings.</h3>
+          <p>Drag both dividers to inspect grid structure, decomposed object color, and final texture.</p>
+        </header>
+        <div class="scene-carousel reveal" data-scene-index="0">
+          <div class="scene-toolbar">
+            <button class="scene-arrow scene-prev" type="button" aria-label="Previous scene"><i data-lucide="arrow-left" aria-hidden="true"></i></button>
+            <div class="scene-tabs" role="tablist" aria-label="Select scene">
+              <button role="tab" aria-selected="true" data-scene="blender">Blender</button>
+              <button role="tab" aria-selected="false" data-scene="nyc">NYC</button>
+              <button role="tab" aria-selected="false" data-scene="berlin">Berlin</button>
+              <button role="tab" aria-selected="false" data-scene="playroom">Playroom</button>
+            </div>
+            <button class="scene-arrow scene-next" type="button" aria-label="Next scene"><i data-lucide="arrow-right" aria-hidden="true"></i></button>
+          </div>
+          <div class="triple-compare" style="--split-one: 33%; --split-two: 67%;">
+            <img class="compare-base" src="scenes/blender_texture_ColmapCamera.001.png" alt="Blender scene with final texture">
+            <div class="compare-layer compare-color"><img src="scenes/debug_colored_ColmapCamera.001.png" alt="Blender scene with decomposed object colors"></div>
+            <div class="compare-layer compare-grid"><img src="scenes/blender_grid_vis_ColmapCamera.001.png" alt="Blender scene grid rendering"></div>
+            <span class="compare-label label-grid">Grid</span>
+            <span class="compare-label label-color">Color</span>
+            <span class="compare-label label-texture">Texture</span>
+            <button class="compare-handle handle-one" type="button" aria-label="Adjust boundary between grid and color" aria-valuemin="8" aria-valuemax="84" aria-valuenow="33"><span></span></button>
+            <button class="compare-handle handle-two" type="button" aria-label="Adjust boundary between color and texture" aria-valuemin="16" aria-valuemax="92" aria-valuenow="67"><span></span></button>
+          </div>
+          <p class="compare-hint"><i data-lucide="move-horizontal" aria-hidden="true"></i> Drag either divider to compare aligned renderings</p>
         </div>
       </div>
-      <figure class="wide-figure reveal">
-        <img src="figures/1-teaser.png" alt="DecomVoxel reconstruction progression from topology and geometry to final appearance">
-        <figcaption><span>Figure 01</span> A scene reconstructed from structure to appearance, while retaining object-level decomposition.</figcaption>
-      </figure>
     </section>
 
     <section class="method section-pad" id="method">
       <div class="section-shell">
-        <header class="section-head reveal">
-          <p class="eyebrow">Method / Inside the voxel field</p>
-          <h2>Decompose. Initialize. Optimize.</h2>
-          <p>Our optimization stays grounded in the captured scene while 3D-native priors complete what the cameras cannot see.</p>
-        </header>
-
-        <div class="pipeline reveal" aria-label="DecomVoxel pipeline">
-          <article><span>01</span><i data-lucide="scan-line" aria-hidden="true"></i><h3>Scene parsing</h3><p>Recover the layout, background, and object instances from posed observations.</p></article>
-          <i class="pipeline-arrow" data-lucide="arrow-right" aria-hidden="true"></i>
-          <article><span>02</span><i data-lucide="boxes" aria-hidden="true"></i><h3>3D-native initialization</h3><p>Lift each instance into a structured voxel representation with complete geometry.</p></article>
-          <i class="pipeline-arrow" data-lucide="arrow-right" aria-hidden="true"></i>
-          <article><span>03</span><i data-lucide="sparkles" aria-hidden="true"></i><h3>Guided denoising</h3><p>Refine geometry and appearance in situ without drifting from the scene evidence.</p></article>
-          <i class="pipeline-arrow" data-lucide="arrow-right" aria-hidden="true"></i>
-          <article><span>04</span><i data-lucide="layers-3" aria-hidden="true"></i><h3>Scene assembly</h3><p>Merge optimized assets with the reconstructed background into an editable mesh.</p></article>
-        </div>
-
-        <div class="method-focus reveal">
-          <div class="method-copy">
-            <p class="eyebrow">Optimization under the microscope</p>
-            <h3 id="method-title">Epsilon-based supervision</h3>
-            <p id="method-description">A stable denoising objective steadily improves scene geometry and avoids the late-stage degradation observed with flow matching.</p>
-            <div class="method-tabs" role="tablist" aria-label="Method analysis">
-              <button role="tab" aria-selected="true" data-image="figures/var-1.png" data-title="Epsilon-based supervision" data-description="A stable denoising objective steadily improves scene geometry and avoids the late-stage degradation observed with flow matching.">Loss</button>
-              <button role="tab" aria-selected="false" data-image="figures/var-2.png" data-title="Scheduled noise" data-description="A linear timestep schedule moves from broad structural edits toward precise local refinement as optimization proceeds.">Noise</button>
-              <button role="tab" aria-selected="false" data-image="figures/var-3.png" data-title="Redistributed pruning" data-description="Uncertain blank-region voxels are redistributed instead of discarded, preserving capacity where object geometry still needs to emerge.">Voxels</button>
-            </div>
-          </div>
-          <figure class="method-visual">
-            <img id="method-image" src="figures/var-1.png" alt="Plot comparing epsilon-based and flow-matching optimization loss">
-          </figure>
+        <header class="section-head reveal"><p class="eyebrow">Method / Guided in-situ reconstruction</p><h2>Method Overview</h2><p>DecomVoxel bridges 3D-native generation and scene reconstruction directly in structured voxel space.</p></header>
+        <figure class="method-overview reveal"><img src="figures/method.png" alt="DecomVoxel method overview from initial reconstruction through geometry and appearance optimization to outputs"><figcaption><span>Pipeline overview</span> Background completion and object-level geometry and appearance refinement.</figcaption></figure>
+        <div class="method-sections">
+          <article class="method-section reveal"><span class="method-index">01 / Denoise</span><div><h3>In-situ Denoising Optimization</h3><p>Incomplete object segments are optimized inside the original scene coordinate space. Our epsilon-based distillation objective naturally downweights unreliable high-noise gradients, then strengthens precise guidance as the latent approaches the clean manifold.</p><div class="tag-row"><span>Epsilon loss</span><span>Flow matching</span><span>Stable refinement</span></div></div></article>
+          <article class="method-section reveal"><span class="method-index">02 / Anchor</span><div><h3>Adaptive Spatial Guidance</h3><p>Occupied anchors preserve confidently observed structures, while vacant anchors suppress hallucinated geometry in known free space. A redistribution strategy keeps empty-region features compatible with the learned latent manifold.</p><div class="tag-row"><span>Occupied anchors</span><span>Vacant anchors</span><span>Redistribution</span></div></div></article>
+          <article class="method-section reveal"><span class="method-index">03 / Optimize</span><div><h3>Optimization</h3><p>The pipeline first reconstructs and partitions the scene, completes the background, and then refines each object in two stages. Geometry optimization recovers complete structure before appearance optimization restores view-consistent, high-fidelity texture.</p><div class="tag-row"><span>Background</span><span>Geometry</span><span>Appearance</span></div></div></article>
         </div>
       </div>
     </section>
 
     <section class="results section-pad" id="results">
       <div class="section-shell">
-        <header class="section-head reveal">
-          <p class="eyebrow">Results / Reconstructed as assets</p>
-          <h2>Coherent rooms. Individual objects.</h2>
-          <p>Complete geometry and rich appearance survive scene-level assembly.</p>
-        </header>
-        <div class="result-stage reveal">
-          <div class="result-label"><span>Rendered scene</span><strong>Object-complete reconstruction</strong></div>
-          <img src="figures/ours-color-all.png" alt="Rendered DecomVoxel scene with a conference table, chairs, and storage units">
-        </div>
-        <div class="result-grid">
-          <figure class="reveal"><img src="figures/sample-franklin.png" alt="A reconstructed indoor scene example"><figcaption><span>Scene fidelity</span>Object geometry remains coherent at room scale.</figcaption></figure>
-          <figure class="reveal"><img src="figures/6-stg.png" alt="Voxel initialization and optimization iterations"><figcaption><span>Optimization trajectory</span>Structured initialization evolves into complete object geometry.</figcaption></figure>
+        <header class="section-head reveal"><p class="eyebrow">Results / Geometry to texture</p><h2>Complete scenes, one object at a time.</h2><p>Browse four reconstructed scenes and compare semantic geometry with final appearance.</p></header>
+        <div class="result-carousel reveal">
+          <div class="result-toolbar"><div><span id="result-counter">01 / 04</span><strong id="result-name">Replica · Scan 2</strong></div><div><button class="result-prev" type="button" aria-label="Previous result"><i data-lucide="arrow-left"></i></button><button class="result-next" type="button" aria-label="Next result"><i data-lucide="arrow-right"></i></button></div></div>
+          <div class="result-pair"><figure><span>Geometry</span><img id="result-geometry" src="results/scan2-ours-replica-geometry_texture.png" alt="Replica scan 2 geometry result"></figure><figure><span>Appearance</span><img id="result-appearance" src="results/scan2-ours-replica-appearance_texture.png" alt="Replica scan 2 appearance result"></figure></div>
         </div>
       </div>
     </section>
 
     <section class="analysis section-pad" id="analysis">
-      <div class="section-shell analysis-grid reveal">
-        <div class="analysis-copy">
-          <p class="eyebrow">Analysis / What makes it work</p>
-          <h2>Guidance that fades at the right time.</h2>
-          <p>The optimization begins with strong structural guidance, then progressively releases the model to resolve local geometry. Scheduled masks, noise, and voxel redistribution each control a different failure mode.</p>
-          <ul>
-            <li><span>01</span><div><strong>Preserve the observation.</strong> Masks protect visible evidence from unconstrained prior drift.</div></li>
-            <li><span>02</span><div><strong>Complete the unseen.</strong> Scheduled noise lets the prior reason globally before refining locally.</div></li>
-            <li><span>03</span><div><strong>Spend voxels wisely.</strong> Redistribution moves representation capacity toward uncertain surfaces.</div></li>
-          </ul>
+      <div class="section-shell">
+        <header class="section-head reveal"><p class="eyebrow">Analysis / Quantitative comparison</p><h2>Lower geometry error. Sharper rendering.</h2><p>Our method consistently outperforms state-of-the-art baselines across both reconstruction and rendering metrics.</p></header>
+        <div class="chart-legend reveal" aria-label="Chart legend"><span class="simrecon">SimRecon</span><span class="sam3d">SAM3D</span><span class="mvsam3d">MV-SAM3D</span><span class="shaper">ShapeR</span><span class="reconvia">ReconViaGen</span><span class="ours">Ours</span></div>
+        <div class="metrics-grid reveal">
+          <article class="metric-chart"><header><span>Reconstruction</span><h3>CD ↓</h3></header><div class="chart-area">
+            <div class="chart-group"><div class="bars"><i class="simrecon" style="--h:100%"><b>17.55</b></i><i class="sam3d" style="--h:60.3%"><b>10.59</b></i><i class="mvsam3d" style="--h:73.3%"><b>12.87</b></i><i class="shaper" style="--h:37.5%"><b>6.59</b></i><i class="reconvia" style="--h:88.3%"><b>15.49</b></i><i class="ours" style="--h:22.5%"><b>3.95</b></i></div><strong>Replica</strong></div>
+            <div class="chart-group"><div class="bars"><i class="simrecon" style="--h:97.5%"><b>17.11</b></i><i class="sam3d" style="--h:72.6%"><b>12.75</b></i><i class="mvsam3d" style="--h:87.5%"><b>15.35</b></i><i class="shaper" style="--h:55.7%"><b>9.77</b></i><i class="reconvia" style="--h:67%"><b>11.75</b></i><i class="ours" style="--h:24.7%"><b>4.34</b></i></div><strong>ScanNet++</strong></div>
+          </div></article>
+          <article class="metric-chart"><header><span>Rendering</span><h3>PSNR ↑</h3></header><div class="chart-area">
+            <div class="chart-group"><div class="bars"><i class="simrecon" style="--h:74.5%"><b>18.04</b></i><i class="sam3d" style="--h:78%"><b>18.89</b></i><i class="mvsam3d" style="--h:77.8%"><b>18.83</b></i><i class="shaper missing" style="--h:0%"><b>–</b></i><i class="reconvia" style="--h:76.7%"><b>18.58</b></i><i class="ours" style="--h:100%"><b>24.21</b></i></div><strong>Replica</strong></div>
+            <div class="chart-group"><div class="bars"><i class="simrecon" style="--h:67.7%"><b>16.40</b></i><i class="sam3d" style="--h:68%"><b>16.46</b></i><i class="mvsam3d" style="--h:71.9%"><b>17.41</b></i><i class="shaper missing" style="--h:0%"><b>–</b></i><i class="reconvia" style="--h:72.7%"><b>17.59</b></i><i class="ours" style="--h:89.7%"><b>21.71</b></i></div><strong>ScanNet++</strong></div>
+          </div></article>
         </div>
-        <figure class="analysis-figure"><img src="figures/5-varification.png" alt="Ablation plots for loss, mask weight, noise timestep, and voxel pruning strategies"></figure>
+        <div class="ablation-block reveal"><div><p class="eyebrow">Ablation / Design choices</p><h3>Each constraint earns its place.</h3><p>Epsilon-based distillation stabilizes convergence, scheduled noise transitions from global completion to local refinement, redistributed pruning suppresses invalid growth, and cosine-power guidance balances synthesis with preservation.</p><div class="tag-row"><span>Epsilon loss</span><span>Linear noise</span><span>Redistributed pruning</span><span>Cosine-power guidance</span></div></div><figure><img src="figures/5-varification.png" alt="Ablation plots comparing loss, guidance schedule, noise timestep, and voxel pruning strategies"></figure></div>
       </div>
     </section>
 
@@ -172,7 +181,8 @@
   title  = {DecomVoxel: Harnessing 3D-Native Priors with
             Guided In-situ Denoising Optimization for
             Decompositional Scene Reconstruction},
-  author = {Anonymous Authors},
+  author = {Junfeng Ni and Zirui Zhou and Yixin Chen and Yu Liu and
+            Nan Jiang and Zhifei Yang and Songchun Zhu and Siyuan Huang},
   year   = {2026}
 }</code></pre>
         </div>
@@ -181,7 +191,7 @@
   </main>
 
   <footer>
-    <a class="footer-brand" href="#top"><span class="brand-cube" aria-hidden="true"></span>DECOMVOXEL</a>
+    <a class="footer-brand" href="#top"><img class="brand-logo" src="figures/logo.png" alt="">DECOMVOXEL</a>
     <p>Topology <span>→</span> Geometry <span>→</span> Appearance</p>
     <a class="back-top" href="#top" aria-label="Back to top"><i data-lucide="arrow-up" aria-hidden="true"></i></a>
   </footer>

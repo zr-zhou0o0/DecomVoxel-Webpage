@@ -1,0 +1,14 @@
+peach = "#E29AA0" # 主色系2，可以用于 线条、边框、标题等
+# coral= "#ff725e"
+dark_peach = "#EA6464" # 主色系2的配色
+brown="#826C52" # 基本不要用
+# green="#76C192"
+green="#4ee0cb" # 主色系1，可以用于 线条、边框、标题等
+yellow="#C2C77C" # 基本不要用
+acid= "#c8e95a" # 基本不要用
+# violet= "#9f87e8"
+dark_purple="#A676B6"
+purple="#C69BD0" # 副色系
+paperwarm = "#e9e5dc" # 背景色1
+dark= "#101318"
+dark-2 = "#181c22"
