@@ -61,24 +61,52 @@
       grid: "scenes/blender_grid_vis_ColmapCamera.001.png",
       color: "scenes/debug_colored_ColmapCamera.001.png",
       texture: "scenes/blender_texture_ColmapCamera.001.png",
+      references: [
+        "scenes_reference/blender/view_000.png",
+        "scenes_reference/blender/view_017.png",
+        "scenes_reference/blender/view_054.png",
+        "scenes_reference/blender/view_115.png",
+        "scenes_reference/blender/view_146.png",
+      ],
     },
     nyc: {
       name: "NYC",
       grid: "scenes/nyc_grid_vis_ColmapCamera.004.png",
       color: "scenes/nyc_colored_ColmapCamera.004.png",
       texture: "scenes/nyc_texture_ColmapCamera.004.png",
+      references: [
+        "scenes_reference/nyc/00002.jpg",
+        "scenes_reference/nyc/00006.jpg",
+        "scenes_reference/nyc/00096.jpg",
+        "scenes_reference/nyc/00229.jpg",
+        "scenes_reference/nyc/00248.jpg",
+      ],
     },
     berlin: {
       name: "Berlin",
       grid: "scenes/berlin_grid_vis_ColmapCamera.003.png",
       color: "scenes/berlin_colored_ColmapCamera.003.png",
       texture: "scenes/berlin_texture_ColmapCamera.003.png",
+      references: [
+        "scenes_reference/berlin/00017.jpg",
+        "scenes_reference/berlin/00031.jpg",
+        "scenes_reference/berlin/00103.jpg",
+        "scenes_reference/berlin/00152.jpg",
+        "scenes_reference/berlin/00254.jpg",
+      ],
     },
     playroom: {
       name: "Playroom",
       grid: "scenes/playroom_grid_vis_ColmapCamera.005.png",
       color: "scenes/playroom_colored_ColmapCamera.005.png",
       texture: "scenes/playroom_texture_ColmapCamera.005.png",
+      references: [
+        "scenes_reference/playroom/00001.jpg",
+        "scenes_reference/playroom/00012.jpg",
+        "scenes_reference/playroom/00036.jpg",
+        "scenes_reference/playroom/00127.jpg",
+        "scenes_reference/playroom/00219.jpg",
+      ],
     },
   };
 
@@ -90,6 +118,8 @@
     color: compare.querySelector(".compare-color img"),
     texture: compare.querySelector(".compare-base"),
   };
+  const sceneReferences = sceneCarousel.querySelector(".scene-references");
+  const referenceImages = [...sceneReferences.querySelectorAll(".reference-list img")];
   let sceneIndex = 0;
   let splitOne = 33;
   let splitTwo = 67;
@@ -102,6 +132,13 @@
     Object.entries(compareImages).forEach(([mode, image]) => {
       image.src = scene[mode];
       image.alt = `${scene.name} scene ${mode} rendering`;
+    });
+    sceneReferences.setAttribute("aria-label", `${scene.name} input reference images`);
+    referenceImages.forEach((image, referenceIndex) => {
+      image.classList.add("switching");
+      image.src = scene.references[referenceIndex];
+      image.alt = `${scene.name} input reference view ${referenceIndex + 1}`;
+      requestAnimationFrame(() => requestAnimationFrame(() => image.classList.remove("switching")));
     });
     sceneCarousel.dataset.sceneIndex = String(sceneIndex);
   };

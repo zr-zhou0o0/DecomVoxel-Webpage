@@ -12,8 +12,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
+      }
+    }
+  </script>
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="script.js" defer></script>
+  <script type="module" src="scene-explorer.js?v=20260818-scenes6"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -41,7 +50,7 @@
     </div>
     <div class="voxel-field" aria-hidden="true"></div>
     <div class="hero-content">
-      <p class="hero-kicker"><span>SIGGRAPH ASIA</span><span class="status-dot"></span><span>2026</span></p>
+      <p class="hero-kicker"><span>SIGGRAPH ASIA</span><span class="status-dot"></span><span class="venue-journal">ACM ToG</span><span class="status-dot"></span><span>2026</span></p>
       <h1><span>Decom</span><strong>Voxel</strong></h1>
       <p class="hero-title">Harnessing 3D-Native Priors with Guided In-situ Denoising Optimization for Decompositional Scene Reconstruction</p>
       <div class="authors" aria-label="Authors and affiliations">
@@ -96,6 +105,65 @@
           <figcaption><span>Project video</span> Guided in-situ optimization.</figcaption>
         </figure>
       </div>
+      <div class="section-shell interactive-lab reveal" id="interactive-scene">
+        <header class="interactive-heading">
+          <div>
+            <p class="eyebrow">Interactive reconstruction / Direct manipulation</p>
+            <h3>Reach into the scene.</h3>
+          </div>
+        </header>
+        <div class="interactive-viewer" data-active-scene="replica6">
+          <div class="interactive-toolbar">
+            <div class="interactive-scene-tabs" role="tablist" aria-label="Select an interactive 3D scene">
+              <button type="button" role="tab" aria-selected="true" data-model="replica6">
+                <span>01</span> Replica · Scan 6
+              </button>
+              <button type="button" role="tab" aria-selected="false" data-model="scannetpp2">
+                <span>02</span> ScanNet++ · Scan 2
+              </button>
+              <button type="button" role="tab" aria-selected="false" data-model="scannetpp3">
+                <span>03</span> ScanNet++ · Scan 3
+              </button>
+              <button type="button" role="tab" aria-selected="false" data-model="replica1">
+                <span>04</span> Replica · Scan 1
+              </button>
+              <button type="button" role="tab" aria-selected="false" data-model="berlin">
+                <span>05</span> Berlin · Scene 6
+              </button>
+              <!-- Blender Scene 7 is temporarily disabled while its GLB is excluded from Git.
+              <button type="button" role="tab" aria-selected="false" data-model="blender">
+                <span>06</span> Blender · Scene 7
+              </button>
+              -->
+            </div>
+            <div class="interactive-actions">
+              <button class="scene-reset" type="button" title="Reset scene objects and camera">
+                <i data-lucide="rotate-ccw" aria-hidden="true"></i><span>Reset</span>
+              </button>
+            </div>
+          </div>
+          <div class="interactive-stage" aria-label="Interactive 3D reconstruction viewer">
+            <div class="scene-loading" role="status" aria-live="polite">
+              <span class="loading-cube" aria-hidden="true"></span>
+              <strong>Preparing scene</strong>
+              <small>Loading 3D reconstruction…</small>
+              <i aria-hidden="true"><b></b></i>
+            </div>
+            <div class="object-readout" aria-live="polite">
+              <span>Object</span><strong>Drag to interact</strong>
+            </div>
+            <div class="viewer-axis" aria-hidden="true"><i></i><span>Y</span></div>
+          </div>
+          <div class="interactive-footer">
+            <p class="interaction-status"><span></span><strong>Direct manipulation</strong> <em>12 objects</em></p>
+            <ul aria-label="3D viewer controls">
+              <li><i data-lucide="mouse-pointer-2" aria-hidden="true"></i><span>Drag object</span></li>
+              <li><i data-lucide="move-3d" aria-hidden="true"></i><span>Drag empty space to orbit</span></li>
+              <li><i data-lucide="scan-search" aria-hidden="true"></i><span>Scroll to zoom</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
       <div class="section-shell intro-showcase">
         <header class="section-head reveal">
           <p class="eyebrow">Scene explorer / Three rendering modes</p>
@@ -113,17 +181,31 @@
             </div>
             <button class="scene-arrow scene-next" type="button" aria-label="Next scene"><i data-lucide="arrow-right" aria-hidden="true"></i></button>
           </div>
-          <div class="triple-compare" style="--split-one: 33%; --split-two: 67%;">
-            <img class="compare-base" src="scenes/blender_texture_ColmapCamera.001.png" alt="Blender scene with final texture">
-            <div class="compare-layer compare-color"><img src="scenes/debug_colored_ColmapCamera.001.png" alt="Blender scene with decomposed object colors"></div>
-            <div class="compare-layer compare-grid"><img src="scenes/blender_grid_vis_ColmapCamera.001.png" alt="Blender scene grid rendering"></div>
-            <span class="compare-label label-grid">Grid</span>
-            <span class="compare-label label-color">Color</span>
-            <span class="compare-label label-texture">Texture</span>
-            <button class="compare-handle handle-one" type="button" aria-label="Adjust boundary between grid and color" aria-valuemin="8" aria-valuemax="84" aria-valuenow="33"><span></span></button>
-            <button class="compare-handle handle-two" type="button" aria-label="Adjust boundary between color and texture" aria-valuemin="16" aria-valuemax="92" aria-valuenow="67"><span></span></button>
+          <div class="scene-comparison-layout">
+            <aside class="scene-references" aria-label="Blender input reference images">
+              <header><span>Input images</span><em>dense view</em></header>
+              <div class="reference-list">
+                <figure><img src="scenes_reference/blender/view_000.png" alt="Blender input reference view 1"></figure>
+                <figure><img src="scenes_reference/blender/view_017.png" alt="Blender input reference view 2"></figure>
+                <figure><img src="scenes_reference/blender/view_054.png" alt="Blender input reference view 3"></figure>
+                <figure><img src="scenes_reference/blender/view_115.png" alt="Blender input reference view 4"></figure>
+                <figure><img src="scenes_reference/blender/view_146.png" alt="Blender input reference view 5"></figure>
+              </div>
+            </aside>
+            <div class="compare-panel">
+              <div class="triple-compare" style="--split-one: 33%; --split-two: 67%;">
+                <img class="compare-base" src="scenes/blender_texture_ColmapCamera.001.png" alt="Blender scene with final texture">
+                <div class="compare-layer compare-color"><img src="scenes/debug_colored_ColmapCamera.001.png" alt="Blender scene with decomposed object colors"></div>
+                <div class="compare-layer compare-grid"><img src="scenes/blender_grid_vis_ColmapCamera.001.png" alt="Blender scene grid rendering"></div>
+                <span class="compare-label label-grid">Grid</span>
+                <span class="compare-label label-color">Color</span>
+                <span class="compare-label label-texture">Texture</span>
+                <button class="compare-handle handle-one" type="button" aria-label="Adjust boundary between grid and color" aria-valuemin="8" aria-valuemax="84" aria-valuenow="33"><span></span></button>
+                <button class="compare-handle handle-two" type="button" aria-label="Adjust boundary between color and texture" aria-valuemin="16" aria-valuemax="92" aria-valuenow="67"><span></span></button>
+              </div>
+              <p class="compare-hint"><i data-lucide="move-horizontal" aria-hidden="true"></i> Drag either divider to compare aligned renderings</p>
+            </div>
           </div>
-          <p class="compare-hint"><i data-lucide="move-horizontal" aria-hidden="true"></i> Drag either divider to compare aligned renderings</p>
         </div>
       </div>
     </section>
@@ -133,9 +215,45 @@
         <header class="section-head method-head reveal"><p class="eyebrow">Method / Guided in-situ reconstruction</p><h2>Method Overview</h2><p>Our framework bridges 3D generative priors with neural reconstruction through a guided in-situ denoising optimization. We segment objects from the initial scene and then sequentially optimize their geometry and appearance under adaptive spatial guidance. This process recovers missing structures and consistent textures while preserving the original scene layout, producing high-fidelity topology, geometry, and appearance.</p></header>
         <figure class="method-overview reveal"><img src="figures/method.png" alt="DecomVoxel method overview from initial reconstruction through geometry and appearance optimization to outputs"><figcaption><span>Pipeline overview</span> Background completion and object-level geometry and appearance refinement.</figcaption></figure>
         <div class="method-sections">
-          <article class="method-section reveal"><span class="method-index">01 / Preliminaries</span><div><h3>In-situ Denoising Optimization</h3><p>We encode each incomplete object segment into a latent representation and optimize it directly in the original scene coordinate system. Instead of uniformly trusting flow-matching gradients at every noise level, we reformulate the objective around the predicted noise residual.</p><ul class="method-points"><li><strong>Scene-aligned refinement.</strong> Completion occurs in situ, avoiding a separate generation-and-alignment stage that can introduce pose, scale, and rotation errors.</li><li><strong>Epsilon-based distillation.</strong> The predicted residual <span class="inline-formula">ε̂<sub>θ</sub> = x<sub>t</sub> + (1 − t)v<sub>θ</sub>(x<sub>t</sub>, t)</span> supervises the latent against sampled noise.</li><li><strong>Adaptive gradient strength.</strong> The factor <span class="inline-formula">(1 − t)</span> suppresses unreliable high-noise updates and strengthens precise low-noise refinement.</li></ul><div class="method-equation" aria-label="Epsilon-based distillation loss"><span class="equation-primary"><i>L</i><sub>ε</sub> = E<sub>t, ε</sub>[‖ε̂<sub>θ</sub>(x<sub>t</sub>; t) − ε‖<sub>2</sub><sup>2</sup>]</span></div></div></article>
-          <article class="method-section reveal"><span class="method-index">02 / Anchor</span><div><h3>Adaptive Spatial Guidance</h3><p>Spatial evidence from the reconstructed scene constrains the stochastic 3D prior. Two complementary anchor sets preserve verified content and prevent geometry from growing into prohibited regions.</p><ul class="method-points"><li><strong>Occupied anchor Ω<sub>O</sub>.</strong> Low-uncertainty voxels retain their initial latent features through a structural preservation loss.</li><li><strong>Vacant anchor Ω<sub>V</sub>.</strong> Ray-cast free space and regions occupied by other instances identify where the current object must not exist.</li><li><strong>Redistribution and annealing.</strong> Vacant features are sampled near a learned void prior rather than hard-zeroed, while noise level and anchor weights decay over time to balance synthesis and fidelity.</li></ul><div class="tag-row"><span>Occupied anchors</span><span>Vacant anchors</span><span>Temporal annealing</span></div></div></article>
-          <article class="method-section reveal"><span class="method-index">03 / Optimize</span><div><h3>Optimization</h3><p>The complete scene is recovered in three sequential stages so that background completion, object geometry, and texture refinement can use the most suitable priors while remaining in one coordinate frame.</p><ul class="method-points"><li><strong>Decompositional reconstruction.</strong> GeoSVR produces a global sparse voxel scene, instance masks partition objects and background, and geometric uncertainty initializes reliable anchors.</li><li><strong>Background completion.</strong> Unobserved colors are inpainted and planar depth constraints support re-optimization before extracting the background mesh.</li><li><strong>Object refinement.</strong> A structural grid first recovers complete geometry; DINOv2 features back-projected from multiple views then initialize appearance latents for texture synthesis.</li></ul><div class="tag-row"><span>Background</span><span>Geometry</span><span>Appearance</span></div></div></article>
+          <article class="method-section reveal">
+            <span class="method-index">01 / Preliminaries</span>
+            <div class="method-main"><h3>In-situ Denoising Optimization</h3><p>We encode each incomplete object segment into a latent representation and optimize it directly in the original scene coordinate system. Instead of uniformly trusting flow-matching gradients at every noise level, we reformulate the objective around the predicted noise residual.</p></div>
+            <aside class="method-notes" aria-label="In-situ denoising optimization details">
+              <header><span>Key details</span><em>Scroll ↕</em></header>
+              <div class="method-notes-scroll">
+                <section class="method-note"><strong>01</strong><h4>Scene-aligned refinement</h4><p>Completion occurs in situ, avoiding a separate generation-and-alignment stage that can introduce pose, scale, and rotation errors.</p></section>
+                <section class="method-note"><strong>02</strong><h4>Epsilon-based distillation</h4><p>The predicted residual supervises the latent against sampled noise.</p><!-- Formula temporarily hidden: <span class="inline-formula">ε̂<sub>θ</sub> = x<sub>t</sub> + (1 − t)v<sub>θ</sub>(x<sub>t</sub>, t)</span> --></section>
+                <section class="method-note"><strong>03</strong><h4>Adaptive gradient strength</h4><p>The adaptive factor suppresses unreliable high-noise updates and strengthens precise low-noise refinement.</p><!-- Formula temporarily hidden: <span class="inline-formula">(1 − t)</span> --></section>
+              </div>
+            </aside>
+            <!-- Formula panel temporarily hidden:
+            <div class="method-equation" aria-label="Epsilon-based distillation loss"><span class="equation-primary"><i>L</i><sub>ε</sub> = E<sub>t, ε</sub>[‖ε̂<sub>θ</sub>(x<sub>t</sub>; t) − ε‖<sub>2</sub><sup>2</sup>]</span></div>
+            -->
+          </article>
+          <article class="method-section reveal">
+            <span class="method-index">02 / Anchor</span>
+            <div class="method-main"><h3>Adaptive Spatial Guidance</h3><p>Spatial evidence from the reconstructed scene constrains the stochastic 3D prior. Two complementary anchor sets preserve verified content and prevent geometry from growing into prohibited regions.</p></div>
+            <aside class="method-notes" aria-label="Adaptive spatial guidance details">
+              <header><span>Key details</span><em>Scroll ↕</em></header>
+              <div class="method-notes-scroll">
+                <section class="method-note"><strong>01</strong><h4>Occupied anchor Ω<sub>O</sub></h4><p>Low-uncertainty voxels retain their initial latent features through a structural preservation loss.</p></section>
+                <section class="method-note"><strong>02</strong><h4>Vacant anchor Ω<sub>V</sub></h4><p>Ray-cast free space and regions occupied by other instances identify where the current object must not exist.</p></section>
+                <section class="method-note"><strong>03</strong><h4>Redistribution and annealing</h4><p>Vacant features are sampled near a learned void prior rather than hard-zeroed, while noise level and anchor weights decay over time.</p></section>
+              </div>
+            </aside>
+          </article>
+          <article class="method-section reveal">
+            <span class="method-index">03 / Optimize</span>
+            <div class="method-main"><h3>Optimization</h3><p>The complete scene is recovered in three sequential stages so that background completion, object geometry, and texture refinement can use the most suitable priors while remaining in one coordinate frame.</p></div>
+            <aside class="method-notes" aria-label="Optimization stage details">
+              <header><span>Key details</span><em>Scroll ↕</em></header>
+              <div class="method-notes-scroll">
+                <section class="method-note"><strong>01</strong><h4>Decompositional reconstruction</h4><p>GeoSVR produces a global sparse voxel scene, instance masks partition objects and background, and geometric uncertainty initializes reliable anchors.</p></section>
+                <section class="method-note"><strong>02</strong><h4>Background completion</h4><p>Unobserved colors are inpainted and planar depth constraints support re-optimization before extracting the background mesh.</p></section>
+                <section class="method-note"><strong>03</strong><h4>Object refinement</h4><p>A structural grid recovers complete geometry; DINOv2 features back-projected from multiple views initialize appearance latents for texture synthesis.</p></section>
+              </div>
+            </aside>
+          </article>
         </div>
       </div>
     </section>
@@ -160,15 +278,14 @@
     <section class="analysis section-pad" id="analysis">
       <div class="section-shell">
         <header class="section-head reveal"><p class="eyebrow">Analysis / Quantitative comparison</p><h2>Lower geometry error. Sharper rendering.</h2><p>Our method consistently outperforms state-of-the-art baselines across both reconstruction and rendering metrics.</p></header>
-        <div class="chart-legend reveal" aria-label="Chart legend"><span class="simrecon">SimRecon</span><span class="sam3d">SAM3D</span><span class="mvsam3d">MV-SAM3D</span><span class="shaper">ShapeR</span><span class="reconvia">ReconViaGen</span><span class="ours">Ours</span></div>
         <div class="metrics-grid reveal">
           <article class="metric-chart"><header><span>Reconstruction</span><h3>CD ↓</h3></header><div class="chart-area">
-            <div class="chart-group"><div class="bars"><i class="simrecon" style="--h:100%"><b>17.55</b></i><i class="sam3d" style="--h:60.3%"><b>10.59</b></i><i class="mvsam3d" style="--h:73.3%"><b>12.87</b></i><i class="shaper" style="--h:37.5%"><b>6.59</b></i><i class="reconvia" style="--h:88.3%"><b>15.49</b></i><i class="ours" style="--h:22.5%"><b>3.95</b></i></div><strong>Replica</strong></div>
-            <div class="chart-group"><div class="bars"><i class="simrecon" style="--h:97.5%"><b>17.11</b></i><i class="sam3d" style="--h:72.6%"><b>12.75</b></i><i class="mvsam3d" style="--h:87.5%"><b>15.35</b></i><i class="shaper" style="--h:55.7%"><b>9.77</b></i><i class="reconvia" style="--h:67%"><b>11.75</b></i><i class="ours" style="--h:24.7%"><b>4.34</b></i></div><strong>ScanNet++</strong></div>
+            <div class="chart-group"><div class="bars"><i class="simrecon" data-label="SimRecon" style="--h:100%"><b>17.55</b></i><i class="sam3d" data-label="SAM3D" style="--h:60.3%"><b>10.59</b></i><i class="mvsam3d" data-label="MV-SAM3D" style="--h:73.3%"><b>12.87</b></i><i class="shaper" data-label="ShapeR" style="--h:37.5%"><b>6.59</b></i><i class="reconvia" data-label="ReconViaGen" style="--h:88.3%"><b>15.49</b></i><i class="ours" data-label="Ours" style="--h:22.5%"><b>3.95</b></i></div><strong>Replica</strong></div>
+            <div class="chart-group"><div class="bars"><i class="simrecon" data-label="SimRecon" style="--h:97.5%"><b>17.11</b></i><i class="sam3d" data-label="SAM3D" style="--h:72.6%"><b>12.75</b></i><i class="mvsam3d" data-label="MV-SAM3D" style="--h:87.5%"><b>15.35</b></i><i class="shaper" data-label="ShapeR" style="--h:55.7%"><b>9.77</b></i><i class="reconvia" data-label="ReconViaGen" style="--h:67%"><b>11.75</b></i><i class="ours" data-label="Ours" style="--h:24.7%"><b>4.34</b></i></div><strong>ScanNet++</strong></div>
           </div></article>
           <article class="metric-chart"><header><span>Rendering</span><h3>PSNR ↑</h3></header><div class="chart-area">
-            <div class="chart-group"><div class="bars"><i class="simrecon" style="--h:74.5%"><b>18.04</b></i><i class="sam3d" style="--h:78%"><b>18.89</b></i><i class="mvsam3d" style="--h:77.8%"><b>18.83</b></i><i class="shaper missing" style="--h:0%"><b>–</b></i><i class="reconvia" style="--h:76.7%"><b>18.58</b></i><i class="ours" style="--h:100%"><b>24.21</b></i></div><strong>Replica</strong></div>
-            <div class="chart-group"><div class="bars"><i class="simrecon" style="--h:67.7%"><b>16.40</b></i><i class="sam3d" style="--h:68%"><b>16.46</b></i><i class="mvsam3d" style="--h:71.9%"><b>17.41</b></i><i class="shaper missing" style="--h:0%"><b>–</b></i><i class="reconvia" style="--h:72.7%"><b>17.59</b></i><i class="ours" style="--h:89.7%"><b>21.71</b></i></div><strong>ScanNet++</strong></div>
+            <div class="chart-group"><div class="bars"><i class="simrecon" data-label="SimRecon" style="--h:74.5%"><b>18.04</b></i><i class="sam3d" data-label="SAM3D" style="--h:78%"><b>18.89</b></i><i class="mvsam3d" data-label="MV-SAM3D" style="--h:77.8%"><b>18.83</b></i><i class="shaper missing" data-label="ShapeR" style="--h:0%"><b>–</b></i><i class="reconvia" data-label="ReconViaGen" style="--h:76.7%"><b>18.58</b></i><i class="ours" data-label="Ours" style="--h:100%"><b>24.21</b></i></div><strong>Replica</strong></div>
+            <div class="chart-group"><div class="bars"><i class="simrecon" data-label="SimRecon" style="--h:67.7%"><b>16.40</b></i><i class="sam3d" data-label="SAM3D" style="--h:68%"><b>16.46</b></i><i class="mvsam3d" data-label="MV-SAM3D" style="--h:71.9%"><b>17.41</b></i><i class="shaper missing" data-label="ShapeR" style="--h:0%"><b>–</b></i><i class="reconvia" data-label="ReconViaGen" style="--h:72.7%"><b>17.59</b></i><i class="ours" data-label="Ours" style="--h:89.7%"><b>21.71</b></i></div><strong>ScanNet++</strong></div>
           </div></article>
         </div>
         <div class="ablation-block reveal"><div class="ablation-copy"><p class="eyebrow">Ablation / Design choices</p><h3>Comparison of different optimization strategies.</h3><p>Our proposed epsilon-based denoising loss (A), linear noise schedule (B), re-distributed pruning strategy (C), and cosine-power preservation loss weight schedule (D) consistently achieve the most stable convergence.</p><div class="tag-row"><span>Epsilon loss</span><span>Linear noise</span><span>Re-distributed pruning</span><span>Cosine-power guidance</span></div></div><div class="ablation-plots"><figure><img src="figures/var-1.png" alt="Comparison of epsilon-based and flow-matching denoising losses"><figcaption><span class="panel-label">(a)</span> Denoising Loss Term</figcaption></figure><figure><img src="figures/var-2.png" alt="Comparison of linear and uniform noise timestep sampling schedules"><figcaption><span class="panel-label">(b)</span> Noise Sampling <i>t</i> Schedule</figcaption></figure><figure><img src="figures/var-3.png" alt="Comparison of no pruning, hard pruning, and redistributed pruning"><figcaption><span class="panel-label">(c)</span> Prune Strategy</figcaption></figure><figure><img src="figures/var-4.png" alt="Comparison of preservation loss weight schedules"><figcaption><span class="panel-label">(d)</span> Preservation Loss Weight <i>w</i><sub>O</sub> Schedule</figcaption></figure></div></div>
@@ -180,10 +297,9 @@
         <div>
           <p class="eyebrow">Citation</p>
           <h2>Build on DecomVoxel.</h2>
-          <p>Paper metadata will be updated when the preprint is released.</p>
         </div>
         <div class="bibtex-wrap">
-          <div class="bibtex-head"><span>BibTeX / coming soon</span><button id="copy-bibtex" type="button"><i data-lucide="copy" aria-hidden="true"></i><span>Copy</span></button></div>
+          <div class="bibtex-head"><span>BibTeX</span><button id="copy-bibtex" type="button"><i data-lucide="copy" aria-hidden="true"></i><span>Copy</span></button></div>
           <pre><code id="bibtex">@article{decomvoxel2026,
   title  = {DecomVoxel: Harnessing 3D-Native Priors with
             Guided In-situ Denoising Optimization for
@@ -196,12 +312,6 @@
       </div>
     </section>
 
-    <section class="acknowledgements" aria-labelledby="acknowledgements-title">
-      <div class="section-shell">
-        <h2 id="acknowledgements-title">Acknowledgements</h2>
-        <p>We gratefully acknowledge <a href="https://microsoft.github.io/TRELLIS/" target="_blank" rel="noopener">TRELLIS</a> and <a href="https://fictionarry.github.io/GeoSVR-project/" target="_blank" rel="noopener">GeoSVR</a>, whose excellent work provided important foundations for this project. We also thank the creators of the <a href="https://vision-language-kinematics.github.io/" target="_blank" rel="noopener">Vision-Language-Kinematics</a> and <a href="https://robosnap.github.io/" target="_blank" rel="noopener">RoboSnap</a> project pages, which inspired the design and presentation of this website.</p>
-      </div>
-    </section>
   </main>
 
   <footer>

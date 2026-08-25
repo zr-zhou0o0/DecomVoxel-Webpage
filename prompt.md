@@ -183,3 +183,156 @@ Comparison of different optimization strategies 里面的 (c) 变成 copyright �
 
 1. 文字修正+tag修正
 2. video？
+
+---
+
+
+异步更新
+navigation 环绕展示场景，也是异步更新
+
+
+
+字调大：
+“∞
+Multi-view
+Input images
+3D
+Native prior
+Object-level in-situ completion
+Δ
+One for all
+Topology, Geometry and Appearance
+&
+Objects & Background
+Complete scene output”
+
+“SIGGRAPH ASIA 2026”
+
+“Explore the scene”
+
+“Junfeng Ni1,2,*
+Zirui Zhou1,*
+Yixin Chen2,†
+Yu Liu1,2
+Nan Jiang2,3
+Zhifei Yang3
+Songchun Zhu3
+Siyuan Huang2
+
+1 Tsinghua University
+2 Beijing Institute for General Artificial Intelligence
+3 Peking University
+
+* Equal contribution.
+† Project lead.
+
+Paper
+soon
+Code
+Data”
+
+“
+Direct manipulation
+12 objects 
+Drag object
+Drag empty space to orbit
+Scroll to zoom”
+
+
+
+
+删掉这些话：
+
+“
+Orbit around each decomposed reconstruction, then grab any object and reposition it freely. Object collisions are disabled for a faster, lighter viewer.”
+
+“· collisions off
+”
+
+
+
+
+我们中了ToG，所以可以把 ACM ToG 也加入这下面这一行？
+SIGGRAPH ASIA
+2026
+
+放大：
+Blender
+NYC
+Berlin
+Playroom
+
+Drag either divider to compare aligned renderings 
+
+所有的这个小标题，统一放大：
+Interactive reconstruction / Direct manipulation
+Scene explorer / Three rendering modes 
+Method / Guided in-situ reconstruction
+Results / Geometry to texture
+Analysis / Quantitative comparison
+Ablation / Design choices
+Citation
+
+删掉 “Paper metadata will be updated when the preprint is released.”
+
+
+
+---
+
+
+
+把这个栏目删掉：“Acknowledgements
+We gratefully acknowledge TRELLIS and GeoSVR, whose excellent work provided important foundations for this project. We also thank the creators of the Vision-Language-Kinematics and RoboSnap project pages, which inspired the design and presentation of this website.”
+
+
+One view，Three readings 这个栏目，能不能在展示框的左侧，再加一个对照的 输入图片栏目？比如左边竖着排列四张输入参考图，右边是现有的这三个可以滑动浏览的栏目，然后如果切换场景的话，左右同时切换。图片就在 scenes_reference 里面。
+
+
+
+Method Overview
+这些公式都注释掉，暂时不用放出来。
+
+Method Overview 一共有三个大板块，但是每个大板块下面的三个小板块，不要放在正文里。在method的每个板块的右侧开一个小窗口，类似于便签/可滑动的感觉，把三个小板块放到右侧的便签里面。
+
+
+
+ Quantitative comparison 方法名称（SimRecon
+SAM3D
+MV-SAM3D
+ShapeR
+ReconViaGen
+Ours）标注到每个柱状图柱子的下面，而不是在上面打图例。
+
+
+--- 
+
+
+
+这些字放大一点：
+01 / Preliminaries 
+02 / Anchor
+03 / Optimize
+
+We encode each incomplete object segment into a latent representation and optimize it directly in the original scene coordinate system. Instead of uniformly trusting flow-matching gradients at every noise level, we reformulate the objective around the predicted noise residual.
+Spatial evidence from the reconstructed scene constrains the stochastic 3D prior. Two complementary anchor sets preserve verified content and prevent geometry from growing into prohibited regions.
+The complete scene is recovered in three sequential stages so that background completion, object geometry, and texture refinement can use the most suitable priors while remaining in one coordinate frame.
+
+
+所有便签里面的字，例如 Key details
+Scroll ↕
+01
+Scene-aligned refinement
+Completion occurs in situ, avoiding a separate generation-and-alignment stage that can introduce pose, scale, and rotation errors.
+
+02
+Epsilon-based distillation
+The predicted residual supervises the latent against sampled noise.
+
+03
+Adaptive gradient strength
+The adaptive factor suppresses unreliable high-noise updates and strengthens precise low-noise refinement. 也都要放大一点！！！
+
+
+Quantitative comparison 这两个表格里面的所有字都要放大一点。
+
+
