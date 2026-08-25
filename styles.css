@@ -173,7 +173,7 @@ h2 { margin: 0; max-width: 900px; font: 700 4.4rem/.98 var(--display); letter-sp
 .scene-tabs button[aria-selected="true"] { color: var(--dark); background: var(--cyan); }
 .scene-arrow { display: grid; place-items: center; }
 .scene-arrow:hover { color: var(--dark); background: var(--peach); }
-.scene-comparison-layout { display: grid; grid-template-columns: clamp(99px, 9.45vw, 142px) minmax(0, 1fr); align-items: start; }
+.scene-comparison-layout { display: grid; grid-template-columns: clamp(110px, 10.5vw, 158px) minmax(0, 1fr); align-items: start; }
 .scene-references { min-width: 0; align-self: start; display: flex; flex-direction: column; border-right: 1px solid var(--line-dark); background: #15191f; }
 .scene-references header { min-height: 54px; padding: 8px 10px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 3px; border-bottom: 1px solid var(--line-dark); font-family: var(--mono); text-transform: uppercase; }
 .scene-references header span { color: var(--peach); font-size: .72rem; font-weight: 500; }
