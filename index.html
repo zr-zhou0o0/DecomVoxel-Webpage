@@ -83,20 +83,22 @@
   </header>
 
   <main id="main">
+    <!--
     <section class="signal-strip" aria-label="Paper highlights">
       <div><strong>∞</strong><span>Multi-view</span><em>Input images</em></div>
       <div><strong>3D</strong><span>Native prior</span><em>Object-level in-situ completion</em></div>
       <div><strong>Δ</strong><span>One for all</span><em>Topology, Geometry and Appearance</em></div>
       <div><strong>&</strong><span>Objects & Background</span><em>Complete scene output</em></div>
     </section>
+    -->
 
     <section class="intro section-pad" id="intro">
       <div class="section-shell intro-grid reveal">
         <div class="intro-copy">
-          <p class="eyebrow">Intro / Guided 3D-native priors</p>
-          <h2>Complete the unseen. Preserve the scene.</h2>
+          <p class="eyebrow">Abstract</p>
+          <h2>Intro</h2>
           <p class="lead">We propose <strong>DecomVoxel</strong>, a framework that integrates guided 3D-native priors to enhance decompositional scene reconstruction. By formulating object completion as guided in-situ optimization, our method achieves high-quality <strong>topology</strong>, <strong>geometry</strong>, and <strong>appearance</strong> for both <strong>individual objects</strong> and <strong>backgrounds</strong> while strictly preserving original spatial layouts.</p>
-          <div class="tag-row" aria-label="Key capabilities"><span>3D-native prior</span><span>In-situ optimization</span><span>Spatially aligned</span></div>
+          <!-- <div class="tag-row" aria-label="Key capabilities"><span>3D-native prior</span><span>In-situ optimization</span><span>Spatially aligned</span></div> -->
         </div>
         <figure class="video-figure">
           <div class="video-frame">
@@ -215,52 +217,81 @@
         <header class="section-head method-head reveal"><p class="eyebrow">Method / Guided in-situ reconstruction</p><h2>Method Overview</h2><p>Our framework bridges 3D generative priors with neural reconstruction through a guided in-situ denoising optimization. We segment objects from the initial scene and then sequentially optimize their geometry and appearance under adaptive spatial guidance. This process recovers missing structures and consistent textures while preserving the original scene layout, producing high-fidelity topology, geometry, and appearance.</p></header>
         <figure class="method-overview reveal"><img src="figures/method.png" alt="DecomVoxel method overview from initial reconstruction through geometry and appearance optimization to outputs"><figcaption><span>Pipeline overview</span> Background completion and object-level geometry and appearance refinement.</figcaption></figure>
         <div class="method-sections">
-          <article class="method-section reveal">
+          <article class="method-section method-section-preliminaries reveal">
             <span class="method-index">01 / Preliminaries</span>
-            <div class="method-main"><h3>In-situ Denoising Optimization</h3><p>We encode each incomplete object segment into a latent representation and optimize it directly in the original scene coordinate system. Instead of uniformly trusting flow-matching gradients at every noise level, we reformulate the objective around the predicted noise residual.</p></div>
+            <div class="method-main">
+              <h3>Preliminaries</h3>
+              <h4>Sparse Voxel Representation</h4>
+              <p>The scene is stored as an octree of sparse voxels carrying position, scale, density, and appearance coefficients. Multi-view instance masks are fused to obtain each object’s voxel subset, while GeoSVR’s geometric uncertainty marks reliable voxels for spatial anchoring.</p>
+              <h4>3D-Native Prior</h4>
+              <p>TRELLIS supplies structure generation, latent appearance refinement, and VAE decoding, allowing incomplete object voxels to become multi-view-consistent geometry and appearance.</p>
+            </div>
+            <!-- Preliminaries note panel temporarily hidden:
+            <aside class="method-notes" aria-label="Preliminaries details">
+              <header><span>Key details</span><em>Scroll ↕</em></header>
+              <div class="method-notes-scroll">
+                <section class="method-note"><strong>01</strong><h4>Scene-aligned representation</h4><p>Sparse voxels keep completion in the original scene coordinate system.</p></section>
+                <section class="method-note"><strong>02</strong><h4>Multi-view consistency</h4><p>The 3D-native prior jointly models structure and appearance.</p></section>
+              </div>
+            </aside>
+            -->
+          </article>
+          <article class="method-section method-section-wide reveal">
+            <span class="method-index">02 / Denoise</span>
+            <div class="method-main">
+              <h3>In-situ Denoising Optimization</h3>
+              <p>We complete each incomplete object directly in the scene coordinate frame by encoding its voxel segment into a latent and iteratively refining it with a pretrained 3D flow-matching prior. An epsilon-based distillation objective adapts update strength along the denoising trajectory, suppressing unreliable high-noise changes while preserving detail as the latent converges.</p>
+            </div>
+            <!-- In-situ denoising note panel temporarily hidden:
             <aside class="method-notes" aria-label="In-situ denoising optimization details">
               <header><span>Key details</span><em>Scroll ↕</em></header>
               <div class="method-notes-scroll">
-                <section class="method-note"><strong>01</strong><h4>Scene-aligned refinement</h4><p>Completion occurs in situ, avoiding a separate generation-and-alignment stage that can introduce pose, scale, and rotation errors.</p></section>
-                <section class="method-note"><strong>02</strong><h4>Epsilon-based distillation</h4><p>The predicted residual supervises the latent against sampled noise.</p><!-- Formula temporarily hidden: <span class="inline-formula">ε̂<sub>θ</sub> = x<sub>t</sub> + (1 − t)v<sub>θ</sub>(x<sub>t</sub>, t)</span> --></section>
-                <section class="method-note"><strong>03</strong><h4>Adaptive gradient strength</h4><p>The adaptive factor suppresses unreliable high-noise updates and strengthens precise low-noise refinement.</p><!-- Formula temporarily hidden: <span class="inline-formula">(1 − t)</span> --></section>
+                <section class="method-note"><strong>01</strong><h4>Scene-aligned refinement</h4><p>Completion occurs directly in the original scene coordinate frame.</p></section>
+                <section class="method-note"><strong>02</strong><h4>Adaptive denoising</h4><p>Noise-level-aware updates stabilize completion and preserve detail.</p></section>
               </div>
             </aside>
-            <!-- Formula panel temporarily hidden:
-            <div class="method-equation" aria-label="Epsilon-based distillation loss"><span class="equation-primary"><i>L</i><sub>ε</sub> = E<sub>t, ε</sub>[‖ε̂<sub>θ</sub>(x<sub>t</sub>; t) − ε‖<sub>2</sub><sup>2</sup>]</span></div>
             -->
           </article>
-          <article class="method-section reveal">
-            <span class="method-index">02 / Anchor</span>
-            <div class="method-main"><h3>Adaptive Spatial Guidance</h3><p>Spatial evidence from the reconstructed scene constrains the stochastic 3D prior. Two complementary anchor sets preserve verified content and prevent geometry from growing into prohibited regions.</p></div>
+          <article class="method-section method-section-anchor reveal">
+            <div class="method-anchor-copy">
+              <div class="method-anchor-label"><span class="method-index">03 / Anchor</span></div>
+              <div class="method-main"><h3>Adaptive Spatial Guidance</h3><p>To regularize the stochasticity of the 3D-native prior, we retain regions with high reconstruction confidence and inject more generative prior into low-confidence regions, balancing structural preservation with completion.</p></div>
+            </div>
             <aside class="method-notes" aria-label="Adaptive spatial guidance details">
               <header><span>Key details</span><em>Scroll ↕</em></header>
               <div class="method-notes-scroll">
-                <section class="method-note"><strong>01</strong><h4>Occupied anchor Ω<sub>O</sub></h4><p>Low-uncertainty voxels retain their initial latent features through a structural preservation loss.</p></section>
-                <section class="method-note"><strong>02</strong><h4>Vacant anchor Ω<sub>V</sub></h4><p>Ray-cast free space and regions occupied by other instances identify where the current object must not exist.</p></section>
-                <section class="method-note"><strong>03</strong><h4>Redistribution and annealing</h4><p>Vacant features are sampled near a learned void prior rather than hard-zeroed, while noise level and anchor weights decay over time.</p></section>
+                <section class="method-note"><strong>01</strong><h4>Occupied anchor Ω<sub>O</sub></h4><p>High-confidence voxels retain their initial latent features through structural preservation.</p></section>
+                <section class="method-note"><strong>02</strong><h4>Vacant anchor Ω<sub>V</sub></h4><p>Free space and neighboring instances identify where the current object must not grow.</p></section>
+                <section class="method-note"><strong>03</strong><h4>Redistribution and annealing</h4><p>Low-confidence features receive stronger generative guidance as anchor weights decay.</p></section>
               </div>
             </aside>
           </article>
-          <article class="method-section reveal">
-            <span class="method-index">03 / Optimize</span>
-            <div class="method-main"><h3>Optimization</h3><p>The complete scene is recovered in three sequential stages so that background completion, object geometry, and texture refinement can use the most suitable priors while remaining in one coordinate frame.</p></div>
-            <aside class="method-notes" aria-label="Optimization stage details">
+          <article class="method-section method-section-wide reveal">
+            <span class="method-index">04 / Pipeline</span>
+            <div class="method-main">
+              <h3>Optimization Pipeline</h3>
+              <h4>01 / Decompositional reconstruction</h4>
+              <p>GeoSVR produces a global sparse voxel scene, instance masks partition objects and background, and geometric uncertainty initializes reliable anchors.</p>
+              <h4>02 / Background completion</h4>
+              <p>Unobserved colors are inpainted and planar depth constraints support re-optimization before extracting the background mesh.</p>
+              <h4>03 / Object refinement</h4>
+              <p>A structural grid recovers complete geometry; DINOv2 features back-projected from multiple views initialize appearance latents for texture synthesis.</p>
+            </div>
+            <!-- Optimization pipeline note panel temporarily hidden:
+            <aside class="method-notes" aria-label="Optimization pipeline details">
               <header><span>Key details</span><em>Scroll ↕</em></header>
-              <div class="method-notes-scroll">
-                <section class="method-note"><strong>01</strong><h4>Decompositional reconstruction</h4><p>GeoSVR produces a global sparse voxel scene, instance masks partition objects and background, and geometric uncertainty initializes reliable anchors.</p></section>
-                <section class="method-note"><strong>02</strong><h4>Background completion</h4><p>Unobserved colors are inpainted and planar depth constraints support re-optimization before extracting the background mesh.</p></section>
-                <section class="method-note"><strong>03</strong><h4>Object refinement</h4><p>A structural grid recovers complete geometry; DINOv2 features back-projected from multiple views initialize appearance latents for texture synthesis.</p></section>
-              </div>
             </aside>
+            -->
           </article>
         </div>
       </div>
     </section>
 
+    <!-- / Geometry to texture -->
+
     <section class="results section-pad" id="results">
       <div class="section-shell">
-        <header class="section-head reveal"><p class="eyebrow">Results / Geometry to texture</p><h2>Qualitative Comparison</h2><p>Browse four reconstructed scenes and compare semantic geometry with final appearance.</p></header>
+        <header class="section-head reveal"><p class="eyebrow">Results</p><h2>Qualitative Comparison</h2><p>Browse four reconstructed scenes and compare semantic geometry with final appearance.</p></header>
         <div class="result-carousel reveal">
           <div class="result-toolbar"><div><span id="result-counter">01 / 04</span><strong id="result-name">Replica · Scan 2</strong></div><div><button class="result-prev" type="button" aria-label="Previous result"><i data-lucide="arrow-left"></i></button><button class="result-next" type="button" aria-label="Next result"><i data-lucide="arrow-right"></i></button></div></div>
           <div class="result-pair"><figure><span>Ours · Geometry</span><img id="result-geometry" src="results/scan2-ours-replica-geometry_texture.png" alt="Replica scan 2 geometry result"></figure><figure><span>Ours · Appearance</span><img id="result-appearance" src="results/scan2-ours-replica-appearance_texture.png" alt="Replica scan 2 appearance result"></figure></div>
@@ -275,9 +306,11 @@
       </div>
     </section>
 
+ <!-- / Quantitative comparison -->
+
     <section class="analysis section-pad" id="analysis">
       <div class="section-shell">
-        <header class="section-head reveal"><p class="eyebrow">Analysis / Quantitative comparison</p><h2>Lower geometry error. Sharper rendering.</h2><p>Our method consistently outperforms state-of-the-art baselines across both reconstruction and rendering metrics.</p></header>
+        <header class="section-head reveal"><p class="eyebrow">Analysis</p><h2>Quantitative comparison</h2><p>Our method consistently outperforms state-of-the-art baselines across both reconstruction and rendering metrics.</p></header>
         <div class="metrics-grid reveal">
           <article class="metric-chart"><header><span>Reconstruction</span><h3>CD ↓</h3></header><div class="chart-area">
             <div class="chart-group"><div class="bars"><i class="simrecon" data-label="SimRecon" style="--h:100%"><b>17.55</b></i><i class="sam3d" data-label="SAM3D" style="--h:60.3%"><b>10.59</b></i><i class="mvsam3d" data-label="MV-SAM3D" style="--h:73.3%"><b>12.87</b></i><i class="shaper" data-label="ShapeR" style="--h:37.5%"><b>6.59</b></i><i class="reconvia" data-label="ReconViaGen" style="--h:88.3%"><b>15.49</b></i><i class="ours" data-label="Ours" style="--h:22.5%"><b>3.95</b></i></div><strong>Replica</strong></div>
@@ -288,7 +321,9 @@
             <div class="chart-group"><div class="bars"><i class="simrecon" data-label="SimRecon" style="--h:67.7%"><b>16.40</b></i><i class="sam3d" data-label="SAM3D" style="--h:68%"><b>16.46</b></i><i class="mvsam3d" data-label="MV-SAM3D" style="--h:71.9%"><b>17.41</b></i><i class="shaper missing" data-label="ShapeR" style="--h:0%"><b>–</b></i><i class="reconvia" data-label="ReconViaGen" style="--h:72.7%"><b>17.59</b></i><i class="ours" data-label="Ours" style="--h:89.7%"><b>21.71</b></i></div><strong>ScanNet++</strong></div>
           </div></article>
         </div>
+        <!-- Ablation / Design choices page temporarily hidden:
         <div class="ablation-block reveal"><div class="ablation-copy"><p class="eyebrow">Ablation / Design choices</p><h3>Comparison of different optimization strategies.</h3><p>Our proposed epsilon-based denoising loss (A), linear noise schedule (B), re-distributed pruning strategy (C), and cosine-power preservation loss weight schedule (D) consistently achieve the most stable convergence.</p><div class="tag-row"><span>Epsilon loss</span><span>Linear noise</span><span>Re-distributed pruning</span><span>Cosine-power guidance</span></div></div><div class="ablation-plots"><figure><img src="figures/var-1.png" alt="Comparison of epsilon-based and flow-matching denoising losses"><figcaption><span class="panel-label">(a)</span> Denoising Loss Term</figcaption></figure><figure><img src="figures/var-2.png" alt="Comparison of linear and uniform noise timestep sampling schedules"><figcaption><span class="panel-label">(b)</span> Noise Sampling <i>t</i> Schedule</figcaption></figure><figure><img src="figures/var-3.png" alt="Comparison of no pruning, hard pruning, and redistributed pruning"><figcaption><span class="panel-label">(c)</span> Prune Strategy</figcaption></figure><figure><img src="figures/var-4.png" alt="Comparison of preservation loss weight schedules"><figcaption><span class="panel-label">(d)</span> Preservation Loss Weight <i>w</i><sub>O</sub> Schedule</figcaption></figure></div></div>
+        -->
       </div>
     </section>
 

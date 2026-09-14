@@ -336,3 +336,82 @@ The adaptive factor suppresses unreliable high-noise updates and strengthens pre
 Quantitative comparison 这两个表格里面的所有字都要放大一点。
 
 
+
+修改 Method 的部分。修改 02 03 并添加 04.
+
+02 讲 In-situ Denoising Optimization
+把右侧的便签页面注释掉。概括一下下面的文字，凝练成1~2句话来概括，不要涉及公式。
+
+3.2 In-situ Denoising Optimization
+A primary objective in decompositional reconstruction is to recover
+the complete geometry and appearance of individual objects from
+incomplete initial segments {V𝑘}. We formulate this completion as
+an in-situ denoising optimization within the scene-level coordinate
+space, leveraging a 3D-native generative prior.
+Given that initial geometries are typically noisy and incomplete,
+a straightforward approach is to encode the initial segment V into a
+latent embedding 𝑥′ by the encoder E and leverage the pre-trained
+Flow Matching model 𝑣𝜃 to iteratively update 𝑥′ via gradient-based
+denoising. Analogous to score-based refinement in diffusion models,
+this process uses the velocity field to minimize the discrepancy
+between the predicted velocity and the target vector field:
+L𝑣 = E𝑡,𝜖 ∥𝑣𝜃 (𝑥𝑡, 𝑡) − (𝜖 − 𝑥′)∥2 2 , (2)
+where 𝑥𝑡 = (1 −𝑡)𝑥′ +𝑡𝜖 represents the probability path at timestep
+𝑡. However, we empirically observe that directly optimizing Equation (2) often leads to unstable convergence or over-smoothed results. This stems from the fact that L𝑣 treats all noise levels with
+uniform gradient importance, failing to account for the varying
+structural reliability along the denoising trajectory.
+To address this, we rethink the distillation process by drawing
+inspiration from the Score Distillation Sampling (SDS) [Poole et al.
+2022] paradigm. We propose a reformulated epsilon-based distillation loss for Flow Matching:
+L𝜖 = E𝑡,𝜖 ∥𝜖ˆ𝜃 (𝑥𝑡 ; 𝑡) − 𝜖∥2 2 , (3)
+where 𝜖ˆ𝜃 (𝑥𝑡 ; 𝑡) = 𝑥𝑡 + (1 −𝑡)𝑣𝜃 (𝑥𝑡, 𝑡) is the noise residual estimated
+from the velocity field. By substituting the definition of 𝑥𝑡, we can
+express the residual as 𝜖ˆ𝜃 = (1 − 𝑡)𝑥′ + 𝑡𝜖 + (1 − 𝑡)𝑣𝜃.
+We formally prove that our proposed objective L𝜖 and the velocity loss L𝑣 share identical gradient directions with respect to
+the latent 𝑥′, differing only by a time-dependent scaling factor:
+∇𝑥′L𝜖 = (1 − 𝑡)∇𝑥′L𝑣 (see supplementary for the full derivation).
+This (1−𝑡) factor arises naturally from 𝜕𝑥𝑡
+𝜕𝑥′ = (1−𝑡), which serves as
+a principled adaptive scheduler. At high noise levels (𝑡 → 1), where
+the generative power is more stochastic, the gradient magnitude
+is naturally suppressed to reduce erroneous geometric deformations. Conversely, as the latents converge toward a cleaner manifold
+(𝑡 → 0) where the model’s velocity predictions are most accurate
+
+
+03 讲 Adaptive Spatial Guidance
+保留右侧的便签页面。
+但是这句话“Spatial evidence from the reconstructed scene constrains the stochastic 3D prior. Two complementary anchor sets preserve verified content and prevent geometry from growing into prohibited regions.”表达的不好，你写的直白一点，就是保留重建置信度高的区域、在重建置信度低的区域加入更多生成 prior。其实主要就是这句话，你把它稍微缩短一点就可以放上去：“To regularize the inherent stochasticity of 3D-native generative
+models, which often compromise the spatial fidelity of reconstructed
+objects, we propose an adaptive spatial guidance strategy to anchor
+the denoising process using spatial constraints and dynamically
+balance generative completion and structural preservation”
+
+
+
+04 讲 Optimization Pipeline
+去掉右侧的便签栏目。然后，描述主要就分为这三段写就可以。
+
+Decompositional reconstruction
+GeoSVR produces a global sparse voxel scene, instance masks partition objects and background, and geometric uncertainty initializes reliable anchors.
+
+02
+Background completion
+Unobserved colors are inpainted and planar depth constraints support re-optimization before extracting the background mesh.
+
+03
+Object refinement
+A structural grid recovers complete geometry; DINOv2 features back-projected from multiple views initialize appearance latents for texture synthesis.
+
+
+
+这一段话的排版改成在“03 / Anchor” 下面，也就是 左侧的两栏是相同宽度、上下排布的，右侧只有一栏是便签栏目，高度与左侧两栏高度之和相等。
+Adaptive Spatial Guidance
+To regularize the stochasticity of the 3D-native prior, we retain regions with high reconstruction confidence and inject more generative prior into low-confidence regions, balancing structural preservation with completion.
+
+
+
+
+把 Lower geometry error. Sharper rendering. 改成 Quantitative comparison。
+
+
+把 Ablation / Design choices Comparison of different optimization strategies. 这一页一整页面注释掉。

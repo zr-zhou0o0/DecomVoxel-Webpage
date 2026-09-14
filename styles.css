@@ -244,6 +244,19 @@ h2 { margin: 0; max-width: 900px; font: 700 4.4rem/.98 var(--display); letter-sp
 .method-section:nth-child(2) .method-index { color: var(--cyan); }
 .method-section:nth-child(3) .method-index { color: var(--purple); }
 .method-section h3 { margin: 0 0 18px; font: 700 2rem var(--display); }
+.method-section.method-section-preliminaries { grid-template-columns: 1fr; }
+.method-section-preliminaries .method-main { grid-column: auto; }
+.method-section-preliminaries .method-main p,
+.method-section-preliminaries .method-equation { max-width: none; }
+.method-section.method-section-wide { grid-template-columns: 1fr; }
+.method-section-wide .method-main { grid-column: auto; }
+.method-section-wide .method-main p { max-width: none; }
+.method-section.method-section-anchor { grid-template-columns: minmax(0, 1fr) minmax(300px, .68fr); align-items: stretch; }
+.method-anchor-copy { min-width: 0; display: grid; grid-template-rows: auto auto; gap: 18px; }
+.method-anchor-label { min-width: 0; }
+.method-section-anchor .method-main p { max-width: none; }
+.method-section-anchor .method-notes { height: 180px; min-height: 0; align-self: stretch; }
+.method-main h4 { margin: 30px 0 10px; color: rgba(255,255,255,.9); font: 700 1.15rem/1.2 var(--display); }
 .method-main p { max-width: 650px; margin: 0; color: rgba(255,255,255,.62); font-size: 1.06rem; line-height: 1.78; }
 .method-notes { position: relative; min-width: 0; height: 292px; overflow: hidden; color: #29251e; border: 1px solid rgba(94,79,44,.26); background: #f1e4bd; box-shadow: 8px 10px 0 rgba(198,155,208,.2), 0 22px 48px rgba(0,0,0,.22); transform: rotate(.35deg); }
 .method-section:nth-child(2) .method-notes { background: #dcefe8; box-shadow: 8px 10px 0 rgba(78,224,203,.16), 0 22px 48px rgba(0,0,0,.22); transform: rotate(-.35deg); }
@@ -385,6 +398,9 @@ footer p span { padding: 0 10px; color: var(--cyan); }
 
 @media (max-width: 900px) {
   .method-section { grid-template-columns: 120px minmax(0, 1fr); }
+  .method-section.method-section-anchor { grid-template-columns: 1fr; }
+  .method-anchor-copy { grid-template-rows: auto auto; gap: 18px; }
+  .method-section-anchor .method-notes { grid-column: auto; }
   .method-notes { grid-column: 2; width: 100%; height: 270px; margin-top: 8px; }
 }
 
@@ -459,6 +475,7 @@ footer p span { padding: 0 10px; color: var(--cyan); }
   .method-overview figcaption span { display: block; margin-bottom: 6px; }
   .method-sections { margin-top: 60px; }
   .method-section { grid-template-columns: 1fr; gap: 18px; padding: 38px 0; }
+  .method-section-preliminaries .method-main { grid-column: auto; }
   .method-section h3 { font-size: 1.65rem; }
   .method-notes { grid-column: auto; height: 270px; margin-top: 8px; }
   .method-equation { font-size: .82rem; overflow-x: auto; }
